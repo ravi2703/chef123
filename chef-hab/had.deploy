@@ -1,0 +1,62 @@
+login to the devcloud machine
+chef hab --version
+
+install habitat
+curl https://artifacts.mc.int/artifactory/archive-external-release/io/chef/habitat/stale/hab_install/install.sh | sudo bash
+hab setup
+
+#next it will ask few things
+connect to an onpremises builder instance- yes
+private builder url: https://bldr.chef.mc.int
+setup a default origin? - yes
+default origin name - mc
+create an origin key for mastercard? yes
+set up a default builder personal access token? no
+set up default habitat supervise control ? no
+
+hab origin key generate <org>
+create cli.toml
+
+mkdir -p ~/.hab/etc
+vi ~/.hab/etc/cli.toml
+origin="mc"
+bldr_url='https://bldr.chef.mc.int'
+generate org key
+ls -la ~/.hab/cache/keys/mastercard-*
+clone git repo habitat
+install chef gem
+chef gem install --verbose mc-kitchen-habitat
+hab pkg build --docker. -- it will create hart file
+ls -latr
+cd /results
+kitchen create
+kitchen list
+kitchen login
+
+come outside run kitchen verify - it will execute default.rb
+
+-- hab pkg upload results/package.hart
+after building we need to promote it to respective channel
+
+#habitat commands
+
+hab svc status
+hab sup run
+hab svc start
+hab svc top
+
+hab pkg promote mc/hello/3.3.3 stable
+
+publish toml
+
+hab config show --remote-sup=wjbstl7:9632 mc/portal/8.07-SNAPSHOT/202020303
+hab config apply
+
+logs
+
+/hab/sup/default/supervisor.log
+/var/log/chef/client.log
+
+
+
+
